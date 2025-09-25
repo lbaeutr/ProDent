@@ -10,6 +10,8 @@ import androidx.activity.enableEdgeToEdge
 // Jetpack Compose - Componentes de layout y espaciado
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 // Material Design 3 - Componentes de UI modernos
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -53,6 +55,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
+        style = MaterialTheme.typography.displayLarge,
         modifier = modifier
     )
 }
