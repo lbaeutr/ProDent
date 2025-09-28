@@ -1,4 +1,4 @@
-package dev.luisbaena.prodentclient.data.local
+package dev.luisbaena.prodentclient.data.local.preferences
 
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
