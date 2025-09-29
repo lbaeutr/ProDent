@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.luisbaena.prodentclient.data.local.prefe.UserPreferences
+import dev.luisbaena.prodentclient.data.local.preferencias.UserPreferences
 import dev.luisbaena.prodentclient.data.remote.api.AuthApiService
 import dev.luisbaena.prodentclient.data.repository.AuthRepositoryImpl
 import dev.luisbaena.prodentclient.domain.repository.AuthRepository

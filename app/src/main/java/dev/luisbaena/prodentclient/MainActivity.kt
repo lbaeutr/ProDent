@@ -1,73 +1,164 @@
+// MainActivity.kt - COMPLETA
 package dev.luisbaena.prodentclient
 
-// Android framework - Gestión del ciclo de vida de actividades
 import android.os.Bundle
-// Jetpack Compose - Actividad base optimizada para UI declarativa
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-// Android - Habilitación de diseño edge-to-edge (pantalla completa)
-import androidx.activity.enableEdgeToEdge
-// Jetpack Compose - Componentes de layout y espaciado
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-// Material Design 3 - Componentes de UI modernos
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-// Jetpack Compose - Sistema de reactividad y composición
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-// Jetpack Compose - Herramientas de previsualización en desarrollo
-import androidx.compose.ui.tooling.preview.Preview
-// Tema personalizado de la aplicación
-import dev.luisbaena.prodentclient.ui.theme.ProDentClientTheme
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
+import dev.luisbaena.prodentclient.presentation.ui.auth.LoginScreen
+import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 
-/**
- * Actividad principal de la aplicación ProDent Client
- * Punto de entrada de la interfaz de usuario
- */
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Habilita diseño edge-to-edge para aprovechar toda la pantalla
-        enableEdgeToEdge()
         setContent {
-            ProDentClientTheme {
-                // Scaffold proporciona estructura básica con Material Design
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+            MaterialTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    ProdentApp()  // ← Aquí está la función principal
                 }
             }
         }
     }
 }
 
-/**
- * Composable de saludo simple
- * @param name Nombre a mostrar en el saludo
- * @param modifier Modificadores de UI opcionales
- */
+// 🚀 FUNCIÓN PRINCIPAL DE TU APP
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        style = MaterialTheme.typography.displayLarge,
-        modifier = modifier
-    )
+fun ProdentApp() {
+    val navController = rememberNavController()  // Controlador de navegación
+    val authViewModel: AuthViewModel = hiltViewModel()  // ViewModel global de auth
+    val uiState by authViewModel.uiState.collectAsState()  // Estado del usuario
+
+    // 🎯 LÓGICA: ¿Dónde empezar?
+    val startDestination = if (uiState.user != null) {
+        "main"    // Si hay usuario → Pantalla principal
+    } else {
+        "login"   // Si NO hay usuario → Login
+    }
+
+    // 🧭 NAVEGACIÓN ENTRE PANTALLAS
+    NavHost(
+        navController = navController,
+        startDestination = startDestination  // Pantalla inicial
+    ) {
+        // 🔐 PANTALLA DE LOGIN
+        composable("login") {
+            LoginScreen(
+                onLoginSuccess = {
+                    // ✅ Login exitoso → Ir a main y limpiar historial
+                    navController.navigate("main") {
+                        popUpTo("login") { inclusive = true }  // No puede volver con "back"
+                    }
+                }
+            )
+        }
+
+        // 🏠 PANTALLA PRINCIPAL (temporal)
+        composable("main") {
+            MainScreen(
+                onLogout = {
+                    // 🚪 Logout → Volver a login
+                    authViewModel.logout()
+                    navController.navigate("login") {
+                        popUpTo("main") { inclusive = true }
+                    }
+                }
+            )
+        }
+    }
 }
 
-/**
- * Preview para visualización en tiempo de desarrollo
- * Permite ver el composable sin ejecutar la app
- */
-@Preview(showBackground = true)
+// 🏠 PANTALLA PRINCIPAL TEMPORAL
 @Composable
-fun GreetingPreview() {
-    ProDentClientTheme {
-        Greeting("Android")
+fun MainScreen(
+    onLogout: () -> Unit,
+    authViewModel: AuthViewModel = hiltViewModel()
+) {
+    val uiState by authViewModel.uiState.collectAsState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        // 🎉 BIENVENIDA
+        Text(
+            text = "¡Bienvenido a ProDent!",
+            style = MaterialTheme.typography.headlineMedium.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // 👤 INFO DEL USUARIO
+        uiState.user?.let { user ->
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "👤 ${user.nombre} ${user.apellido}",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Text(
+                        text = "📧 ${user.email}",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                    Text(
+                        text = "🏷️ Rol: ${user.role}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // 🚪 BOTÓN DE LOGOUT
+        OutlinedButton(
+            onClick = onLogout,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("🚪 Cerrar Sesión")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 💡 NOTA TEMPORAL
+        Text(
+            text = "Esta es una pantalla temporal.\n¡Pronto tendrás gestión de trabajos, dentistas y más!",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }

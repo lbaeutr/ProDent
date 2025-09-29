@@ -1,6 +1,4 @@
-package dev.luisbaena.prodentclient.data.local.prefe
-
-
+package dev.luisbaena.prodentclient.data.local.preferencias
 
 
 import android.content.Context
