@@ -3,11 +3,11 @@ package dev.luisbaena.prodentclient.data.repository
 import dev.luisbaena.prodentclient.data.remote.api.AuthApiService
 import dev.luisbaena.prodentclient.data.remote.dto.LoginRequestDto
 import dev.luisbaena.prodentclient.domain.model.User
+import dev.luisbaena.prodentclient.data.local.prefe.UserPreferences
 import dev.luisbaena.prodentclient.domain.repository.AuthRepository
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
-import dev.luisbaena.prodentclient.data.local.preferences.UserPreferences
 
 
 /*
