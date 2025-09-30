@@ -18,13 +18,14 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.luisbaena.prodentclient.presentation.ui.auth.LoginScreen
 import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
+import dev.luisbaena.prodentclient.ui.theme.ProdentclientTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
+            ProdentclientTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

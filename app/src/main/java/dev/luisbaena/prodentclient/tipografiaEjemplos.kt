@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.luisbaena.prodentclient.ui.theme.ProDentClientTheme
+import dev.luisbaena.prodentclient.ui.theme.ProdentclientTheme
 
 @Composable
 fun TypographyExamples() {
@@ -121,7 +121,7 @@ fun TypographyExamples() {
 @Preview(showBackground = true)
 @Composable
 fun TypographyExamplesPreview() {
-    ProDentClientTheme {
+    ProdentclientTheme {
         TypographyExamples()
     }
 }
