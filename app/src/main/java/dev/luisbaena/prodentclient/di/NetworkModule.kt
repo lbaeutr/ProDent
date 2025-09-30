@@ -29,10 +29,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    // TODO: VER SI CAMBIO LA URL, ESTAMOS PENDIENTE A ESTO TB.
-    private const val BASE_URL = "https://prodent.onrender.com/api/"
+    // TODO: VERIFICAR ESTO
+    //private const val BASE_URL = "https://prodent.onrender.com/api/"
 
-
+    private const val BASE_URL = "https://prodent-api.onrender.com"
+    // private const val BASE_URL = "http://localhost:8080/"
 
     @Provides
     @Singleton

@@ -29,8 +29,8 @@ fun LoginScreen(
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("luis@ejemplo.com") }
+    var password by remember { mutableStateOf("Segura123!") }
     var showPassword by remember { mutableStateOf(false) }
 
     // Navegar cuando login sea exitoso

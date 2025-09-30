@@ -1,5 +1,6 @@
 package dev.luisbaena.prodentclient.data.repository
 
+import android.util.Log
 import dev.luisbaena.prodentclient.data.local.preferencias.UserPreferences
 import dev.luisbaena.prodentclient.data.remote.api.AuthApiService
 import dev.luisbaena.prodentclient.data.remote.dto.LoginRequestDto
@@ -30,14 +31,50 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun login(email: String, password: String): Result<User> {
         return try {
             val request = LoginRequestDto(email, password)
-            val response = apiService.login(request)
+            val loginResponse = apiService.login(request)
 
-            if (response.success && response.data != null) {
-                val user = response.data.toDomain()
-                userPreferences.saveUser(user) // Guardar sesión automáticamente
-                Result.success(user)
+            if (loginResponse.token.isNotEmpty()) {
+                // Obtener datos completos del usuario
+                try {
+                    val userDto = apiService.getProfile("Bearer ${loginResponse.token}")
+
+                    val user = User(
+                        id = "",
+                        nombre = userDto.name,
+                        apellido = userDto.lastname,
+                        email = userDto.email,
+                        telefono = userDto.phone,
+                        token = loginResponse.token,
+                        role = userDto.roles
+                    )
+
+                    userPreferences.saveUser(user)
+                    Log.d(
+                        "AuthRepo",
+                        "Usuario guardado con perfil: email=${user.email} ,token=${user.token}"
+                    )
+                    Result.success(user)
+                } catch (e: Exception) {
+                    // Si falla obtener el perfil, guardar con datos mínimos
+                    val user = User(
+                        id = "",
+                        nombre = "",
+                        apellido = "",
+                        email = email,
+                        telefono = "",
+                        role = "",
+                        token = loginResponse.token
+                    )
+                    userPreferences.saveUser(user)
+                    Log.d(
+                        "AuthRepo",
+                        "Usuario guardado con datos mínimos: token=${user.token}, email=${user.email}"
+                    )
+                    Result.success(user)
+
+                }
             } else {
-                Result.failure(Exception(response.message))
+                Result.failure(Exception("Token vacío en la respuesta"))
             }
         } catch (e: HttpException) {
             val errorMessage = when (e.code()) {
@@ -50,7 +87,7 @@ class AuthRepositoryImpl @Inject constructor(
                 else -> "Error de conexión (${e.code()})"
             }
             Result.failure(Exception(errorMessage))
-        } catch (_: IOException) {
+        } catch (e: IOException) {
             Result.failure(Exception("Sin conexión a internet. Verifica tu conexión."))
         } catch (e: Exception) {
             Result.failure(Exception("Error inesperado: ${e.message}"))

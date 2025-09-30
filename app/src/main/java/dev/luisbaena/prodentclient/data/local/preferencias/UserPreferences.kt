@@ -41,7 +41,6 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "pr
 class UserPreferences @Inject constructor(@ApplicationContext private val context: Context) {
 
     companion object {
-        private val KEY_USER_ID = stringPreferencesKey("user_id")
         private val KEY_USER_NAME = stringPreferencesKey("user_name")
         private val KEY_USER_LASTNAME = stringPreferencesKey("user_lastname")
         private val KEY_USER_EMAIL = stringPreferencesKey("user_email")
@@ -54,7 +53,6 @@ class UserPreferences @Inject constructor(@ApplicationContext private val contex
 
     suspend fun saveUser(user: User) {
         context.dataStore.edit { prefs ->
-            prefs[KEY_USER_ID] = user.id
             prefs[KEY_USER_NAME] = user.nombre
             prefs[KEY_USER_LASTNAME] = user.apellido
             prefs[KEY_USER_EMAIL] = user.email
@@ -71,7 +69,6 @@ class UserPreferences @Inject constructor(@ApplicationContext private val contex
         val isLoggedIn = preferences[KEY_IS_LOGGED_IN] ?: false
         if (!isLoggedIn)  return null
 
-        val id = preferences[KEY_USER_ID] ?: return null
         val email = preferences[KEY_USER_EMAIL] ?: return null
         val phone = preferences[KEY_USER_PHONE] ?: return null
         val name = preferences[KEY_USER_NAME] ?: return null
@@ -79,13 +76,13 @@ class UserPreferences @Inject constructor(@ApplicationContext private val contex
         val token = preferences[KEY_USER_TOKEN] ?: return null
         val role = preferences[KEY_USER_ROLE] ?: return null
 
-        if (id.isBlank() || token.isBlank()) {
+        if (email.isBlank() || token.isBlank()) {
             clearUser()
             return null
         }
 
         return User(
-            id = id,
+            id = "",
             nombre = name,
             apellido = lastname,
             email = email,
@@ -117,7 +114,6 @@ class UserPreferences @Inject constructor(@ApplicationContext private val contex
         val isLoggedIn = prefs[KEY_IS_LOGGED_IN] ?: false
         if (!isLoggedIn)  return@map null
 
-        val id = prefs[KEY_USER_ID] ?: return@map null
         val email = prefs[KEY_USER_EMAIL] ?: return@map null
         val phone = prefs[KEY_USER_PHONE] ?: return@map null
         val name = prefs[KEY_USER_NAME] ?: return@map null
@@ -125,8 +121,8 @@ class UserPreferences @Inject constructor(@ApplicationContext private val contex
         val token = prefs[KEY_USER_TOKEN] ?: return@map null
         val role = prefs[KEY_USER_ROLE] ?: return@map null
 
-        if (id.isBlank() || token.isBlank()) return@map null
+        if (email.isBlank() || token.isBlank()) return@map null
 
-        User(id, name, lastname, email, phone, token, role)
+        User("", name, lastname, email, phone, token, role)
     }
 }

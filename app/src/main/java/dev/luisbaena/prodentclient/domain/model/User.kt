@@ -7,5 +7,5 @@ data class User(
     val email: String,
     val telefono: String,
     val token: String,
-    val role: String
+    val role: String,
 )
