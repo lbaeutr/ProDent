@@ -2,4 +2,14 @@
 <resources>
 
     <style name="Theme.ProDentClient" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Tema para Splash Screen -->
+    <style name="Theme.App.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#26D2A0</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="windowSplashScreenIconBackgroundColor">#26D2A0</item>
+        <item name="windowSplashScreenAnimationDuration">2000</item>
+        <item name="postSplashScreenTheme">@style/Theme.ProDentClient</item>
+    </style>
+
 </resources>

@@ -90,5 +90,8 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
+    // Core Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
 
 }

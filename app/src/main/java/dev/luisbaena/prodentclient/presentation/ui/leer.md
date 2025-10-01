@@ -8,15 +8,15 @@
 - **`common/`** - Componentes UI reutilizables (botones, cards, inputs)
 - **`forms/`** - Componentes específicos de formularios
 
-
 ###  `ui/navigation/`
 
 ###  `ui/screens/`
 - **`auth/LoginScreen.kt`** - Pantalla de inicio de sesión
 
-###  `viewmodel/`
-- **`AuthViewModel.kt`** - ViewModel para manejo de estado de autenticación
-
+### `ui/examples/`
+- **ejemplosDeColores** - Ejemplos de paletas de colores
+- **ejemplosDeTipografia** - Ejemplos de estilos tipográficos
+- 
 # Arquitectura MVVM
 
 ## Responsabilidades por Capa
