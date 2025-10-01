@@ -16,7 +16,7 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme = darkColorScheme(
     // Primarios - Verde ProDent
     primary = ProdentGreen,
-    onPrimary = Color(0xFF003828),
+    onPrimary = ProdentGrayDark,
     primaryContainer = ProdentGreenDark,
     onPrimaryContainer = ProdentGreenLight,
 
