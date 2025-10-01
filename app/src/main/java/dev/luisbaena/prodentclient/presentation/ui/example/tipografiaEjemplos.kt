@@ -1,4 +1,4 @@
-package dev.luisbaena.prodentclient
+package dev.luisbaena.prodentclient.presentation.ui.example
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -118,7 +118,7 @@ fun TypographyExamples() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true,heightDp = 1000)
 @Composable
 fun TypographyExamplesPreview() {
     ProdentclientTheme {

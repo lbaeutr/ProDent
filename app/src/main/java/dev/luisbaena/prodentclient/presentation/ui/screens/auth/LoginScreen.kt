@@ -1,4 +1,4 @@
-package dev.luisbaena.prodentclient.presentation.ui.auth
+package dev.luisbaena.prodentclient.presentation.ui.screens.auth
 
 
 import androidx.compose.foundation.layout.*

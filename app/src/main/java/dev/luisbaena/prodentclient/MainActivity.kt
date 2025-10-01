@@ -16,7 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import dev.luisbaena.prodentclient.presentation.ui.auth.LoginScreen
+import dev.luisbaena.prodentclient.presentation.ui.screens.auth.LoginScreen
 import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 import dev.luisbaena.prodentclient.ui.theme.ProdentclientTheme
 
