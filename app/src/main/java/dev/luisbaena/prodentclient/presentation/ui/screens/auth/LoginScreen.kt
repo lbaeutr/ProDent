@@ -1,6 +1,7 @@
 package dev.luisbaena.prodentclient.presentation.ui.screens.auth
 
-
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -19,6 +20,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.ui.res.painterResource
+import dev.luisbaena.prodentclient.R
+import dev.luisbaena.prodentclient.presentation.ui.components.common.images.LogoScreens
 import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 
 
@@ -26,6 +30,7 @@ import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
+    onNavigateToRegister: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -35,7 +40,7 @@ fun LoginScreen(
 
     // Navegar cuando login sea exitoso
     LaunchedEffect(uiState.isSuccess) {
-        if (uiState.isSuccess && uiState.user != null) {
+        if (uiState.isSuccess) {
             onLoginSuccess()
         }
     }
@@ -45,18 +50,11 @@ fun LoginScreen(
             .fillMaxSize()
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
-
-        // Logo/Title
-        Text(
-            text = "ProDent",
-            style = MaterialTheme.typography.headlineLarge.copy(
-                fontWeight = FontWeight.Bold,
-                fontSize = 36.sp
-            ),
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(bottom = 8.dp)
+        LogoScreens(
+            modifier = Modifier
+                .size(190.dp)
         )
 
         Text(
@@ -161,6 +159,14 @@ fun LoginScreen(
                             fontWeight = FontWeight.SemiBold
                         )
                     }
+                }
+
+                // Botón de registro
+                TextButton(
+                    onClick = onNavigateToRegister,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("¿No tienes cuenta? Regístrate")
                 }
 
                 // Error Message
