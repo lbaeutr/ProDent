@@ -61,9 +61,6 @@ fun AppNavigation() {
                     navController.navigate(Routes.Main) {
                         popUpTo(Routes.Login) { inclusive = true }
                     }
-                },
-                onNavigateToRegister = {
-                    navController.navigate(Routes.Register)
                 }
             )
         }

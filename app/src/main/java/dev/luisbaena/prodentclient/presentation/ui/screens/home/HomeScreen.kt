@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.luisbaena.prodentclient.presentation.ui.components.cabecera
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,29 +22,31 @@ fun HomeScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // TopAppBar con botón de logout
-        TopAppBar(
-            title = {
-                Text(
-                    "Inicio",
-                    fontWeight = FontWeight.Bold
-                )
-            },
-            actions = {
-                IconButton(onClick = onNavigateToProfile) {
-                    Icon(
-                        Icons.Default.Person,
-                        contentDescription = "Perfil"
-                    )
-                }
-                IconButton(onClick = onLogout) {
-                    Icon(
-                        Icons.Default.ExitToApp,
-                        contentDescription = "Cerrar sesión"
-                    )
-                }
-            }
-        )
+
+        cabecera("Inicio")
+//        // TopAppBar con botón de logout
+//        TopAppBar(
+//            title = {
+//                Text(
+//                    "Inicio",
+//                    fontWeight = FontWeight.Bold
+//                )
+//            },
+////            actions = {
+////                IconButton(onClick = onNavigateToProfile) {
+////                    Icon(
+////                        Icons.Default.Person,
+////                        contentDescription = "Perfil"
+////                    )
+////                }
+////                IconButton(onClick = onLogout) {
+////                    Icon(
+////                        Icons.Default.ExitToApp,
+////                        contentDescription = "Cerrar sesión"
+////                    )
+////                }
+////            }
+//        )
 
         // Contenido principal
         Column(
@@ -65,7 +68,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Esta es la pantalla principal",
+                text = "TENEMOS QUE HACER COSAS AQUI DARLE UNA IDEA AL USUARIO DE LOS TRABAJOS",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

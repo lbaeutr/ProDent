@@ -1,10 +1,7 @@
 package dev.luisbaena.prodentclient.presentation.ui.screens.auth
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,8 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.ui.res.painterResource
-import dev.luisbaena.prodentclient.R
+import dev.luisbaena.prodentclient.presentation.ui.components.common.inputs.CustomTextField
 import dev.luisbaena.prodentclient.presentation.ui.components.common.images.LogoScreens
 import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 
@@ -30,7 +26,7 @@ import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
-    onNavigateToRegister: () -> Unit,
+    // onNavigateToRegister: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -52,9 +48,11 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+
+
         LogoScreens(
             modifier = Modifier
-                .size(190.dp)
+                .size(200.dp)
         )
 
         Text(
@@ -85,44 +83,32 @@ fun LoginScreen(
                 )
 
                 // Email Field
-                OutlinedTextField(
+                CustomTextField(
                     value = email,
                     onValueChange = {
                         email = it
                         viewModel.clearError()
                     },
-                    label = { Text("Email") },
-                    placeholder = { Text("ejemplo@correo.com") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    modifier = Modifier.fillMaxWidth(),
+                    label = "Email",
+                    placeholder = "ejemplo@correo.com",
+                    keyboardType = KeyboardType.Email,
                     enabled = !uiState.isLoading,
-                    singleLine = true,
-                    shape = RoundedCornerShape(12.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
-                    )
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 // Password Field
-                OutlinedTextField(
+                CustomTextField(
                     value = password,
                     onValueChange = {
                         password = it
                         viewModel.clearError()
                     },
-                    label = { Text("Contraseña") },
-                    placeholder = { Text("Tu contraseña") },
+                    label = "Contraseña",
+                    placeholder = "Tu contraseña",
+                    keyboardType = KeyboardType.Password,
                     visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    modifier = Modifier.fillMaxWidth(),
                     enabled = !uiState.isLoading,
-                    singleLine = true,
-                    shape = RoundedCornerShape(12.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
-                    ),
+                    modifier = Modifier.fillMaxWidth(),
                     trailingIcon = {
                         IconButton(onClick = { showPassword = !showPassword }) {
                             Icon(
@@ -132,6 +118,7 @@ fun LoginScreen(
                         }
                     }
                 )
+
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -161,13 +148,13 @@ fun LoginScreen(
                     }
                 }
 
-                // Botón de registro
-                TextButton(
-                    onClick = onNavigateToRegister,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("¿No tienes cuenta? Regístrate")
-                }
+//                // Botón de registro
+//                TextButton(
+//                    onClick = onNavigateToRegister,
+//                    modifier = Modifier.fillMaxWidth()
+//                ) {
+//                    Text("¿No tienes cuenta? Regístrate")
+//                }
 
                 // Error Message
                 uiState.errorMessage?.let { error ->

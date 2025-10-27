@@ -25,8 +25,8 @@ fun LogoScreens(
 ) {
     Image(
         painter = painterResource(
-            id = if (isSystemInDarkTheme()) R.drawable.ic_splash_logo
-            else R.drawable.ic_splash_logo
+            id = if (isSystemInDarkTheme()) R.drawable.logo_screen
+            else R.drawable.logo_screen
         ),
         contentDescription = contentDescription,
         contentScale = ContentScale.Fit,
