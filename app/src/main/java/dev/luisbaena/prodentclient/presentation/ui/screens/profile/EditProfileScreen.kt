@@ -9,19 +9,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.luisbaena.prodentclient.presentation.ui.components.Cabecera
-    import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
-import dev.luisbaena.prodentclient.ui.theme.ProdentGreen
+import dev.luisbaena.prodentclient.presentation.ui.components.common.cards.ErrorCard
+import dev.luisbaena.prodentclient.presentation.ui.components.common.cards.InfoCard
+import dev.luisbaena.prodentclient.presentation.ui.components.common.buttons.PrimaryLoadingButton
+import dev.luisbaena.prodentclient.presentation.ui.components.common.buttons.SecondaryButton
+import dev.luisbaena.prodentclient.presentation.ui.components.common.dialogs.SuccessDialog
+import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 
 
-// TODO: Modularizar los componentes de este screen si es posible adjuntarlos con los del login que comparten muchos elementos
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
@@ -66,30 +67,9 @@ fun EditProfileScreen(
         ) {
 
             // Información
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Info,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = "Actualiza tu información personal",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-            }
+            InfoCard(
+                message = "Actualiza tu información personal"
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -167,113 +147,42 @@ fun EditProfileScreen(
 
             // Error message
             uiState.errorMessage?.let { error ->
-                Card(
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer
-                    ),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Warning,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.error
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text(
-                            text = error,
-                            color = MaterialTheme.colorScheme.onErrorContainer,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
+                ErrorCard(errorMessage = error)
             }
 
             // BOTÓN GUARDAR
-            Button(
+            PrimaryLoadingButton(
+                text = "Guardar Cambios",
                 onClick = {
                     isUpdating = true
                     authViewModel.updateProfile(nombre, apellido, email, telefono)
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                enabled = !uiState.isLoading &&
-                        nombre.isNotBlank() &&
+                enabled = nombre.isNotBlank() &&
                         apellido.isNotBlank() &&
                         telefono.isNotBlank() &&
                         email.isNotBlank(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = ProdentGreen
-                ),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                if (uiState.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        strokeWidth = 2.dp
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text("Guardando...")
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.Save,
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        "Guardar Cambios",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
-                }
-            }
+                isLoading = uiState.isLoading,
+                loadingText = "Guardando",
+                icon = Icons.Default.Save
+            )
 
             // BOTÓN CANCELAR
-            OutlinedButton(
+            SecondaryButton(
+                text = "Cancelar",
                 onClick = { navController.popBackStack() },
-                modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isLoading
-            ) {
-                Text("Cancelar")
-            }
+            )
         }
     }
 
     // DIÁLOGO DE ÉXITO
-    if (showSuccessDialog && !uiState.isLoading && uiState.errorMessage == null) {
-        AlertDialog(
-            onDismissRequest = { },
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.CheckCircle,
-                    contentDescription = null,
-                    tint = ProdentGreen
-                )
-            },
-            title = { Text("¡Perfil actualizado!") },
-            text = { Text("Tu información ha sido actualizada correctamente.") },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        showSuccessDialog = false
-                        navController.popBackStack()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = ProdentGreen
-                    )
-                ) {
-                    Text("Aceptar")
-                }
-            }
-        )
-    }
+    SuccessDialog(
+        show = showSuccessDialog && !uiState.isLoading && uiState.errorMessage == null,
+        title = "¡Perfil actualizado!",
+        message = "Tu información ha sido actualizada correctamente.",
+        onConfirm = {
+            showSuccessDialog = false
+            navController.popBackStack()
+        }
+    )
 }

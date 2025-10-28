@@ -2,22 +2,19 @@ package dev.luisbaena.prodentclient.presentation.ui.screens.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import dev.luisbaena.prodentclient.presentation.ui.components.common.inputs.CustomTextField
+import dev.luisbaena.prodentclient.presentation.ui.components.common.inputs.PasswordTextField
+import dev.luisbaena.prodentclient.presentation.ui.components.common.cards.ErrorCard
+import dev.luisbaena.prodentclient.presentation.ui.components.common.buttons.PrimaryLoadingButton
 import dev.luisbaena.prodentclient.presentation.ui.components.common.images.LogoScreens
 import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 
@@ -32,7 +29,6 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsState()
     var email by remember { mutableStateOf("luis@ejemplo.com") }
     var password by remember { mutableStateOf("Segura123!") }
-    var showPassword by remember { mutableStateOf(false) }
 
     // Navegar cuando login sea exitoso
     LaunchedEffect(uiState.isSuccess) {
@@ -97,7 +93,7 @@ fun LoginScreen(
                 )
 
                 // Password Field
-                CustomTextField(
+                PasswordTextField(
                     value = password,
                     onValueChange = {
                         password = it
@@ -105,48 +101,21 @@ fun LoginScreen(
                     },
                     label = "Contraseña",
                     placeholder = "Tu contraseña",
-                    keyboardType = KeyboardType.Password,
-                    visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                     enabled = !uiState.isLoading,
-                    modifier = Modifier.fillMaxWidth(),
-                    trailingIcon = {
-                        IconButton(onClick = { showPassword = !showPassword }) {
-                            Icon(
-                                imageVector = if (showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                                contentDescription = if (showPassword) "Ocultar contraseña" else "Mostrar contraseña"
-                            )
-                        }
-                    }
+                    modifier = Modifier.fillMaxWidth()
                 )
 
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Login Button
-                Button(
+                PrimaryLoadingButton(
+                    text = "Iniciar Sesión",
                     onClick = { viewModel.login(email, password) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    enabled = !uiState.isLoading && email.isNotBlank() && password.isNotBlank(),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    if (uiState.isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(20.dp),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            strokeWidth = 2.dp
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Text("Iniciando sesión...")
-                    } else {
-                        Text(
-                            "Iniciar Sesión",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
+                    enabled = email.isNotBlank() && password.isNotBlank(),
+                    isLoading = uiState.isLoading,
+                    loadingText = "Iniciando sesión"
+                )
 
 //                // Botón de registro
 //                TextButton(
@@ -158,28 +127,7 @@ fun LoginScreen(
 
                 // Error Message
                 uiState.errorMessage?.let { error ->
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.errorContainer
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "⚠️",
-                                fontSize = 20.sp,
-                                modifier = Modifier.padding(end = 12.dp)
-                            )
-                            Text(
-                                text = error,
-                                color = MaterialTheme.colorScheme.onErrorContainer,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
-                    }
+                    ErrorCard(errorMessage = error)
                 }
             }
         }

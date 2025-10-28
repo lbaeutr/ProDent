@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/limpiar_archivos_antiguos.bat">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/limpiar_archivos_antiguos.bat" />
+              <option name="updatedContent" value="@echo off&#10;echo ========================================&#10;echo   LIMPIEZA DE ARCHIVOS MARKDOWN ANTIGUOS&#10;echo ========================================&#10;echo.&#10;echo Este script eliminara los archivos Markdown antiguos de la raiz&#10;echo que ya han sido movidos y reorganizados en la carpeta docs/&#10;echo.&#10;&#10;pause&#10;&#10;echo.&#10;echo Eliminando archivos antiguos...&#10;echo.&#10;&#10;if exist VERIFICACION_TEMA_TIPOGRAFIA.md (&#10;    del VERIFICACION_TEMA_TIPOGRAFIA.md&#10;    echo [OK] VERIFICACION_TEMA_TIPOGRAFIA.md eliminado&#10;) else (&#10;    echo [--] VERIFICACION_TEMA_TIPOGRAFIA.md no existe&#10;)&#10;&#10;if exist MODULARIZACION_COMPLETADA.md (&#10;    del MODULARIZACION_COMPLETADA.md&#10;    echo [OK] MODULARIZACION_COMPLETADA.md eliminado&#10;) else (&#10;    echo [--] MODULARIZACION_COMPLETADA.md no existe&#10;)&#10;&#10;if exist RESUMEN_COMPONENTES.md (&#10;    del RESUMEN_COMPONENTES.md&#10;    echo [OK] RESUMEN_COMPONENTES.md eliminado&#10;) else (&#10;    echo [--] RESUMEN_COMPONENTES.md no existe&#10;)&#10;&#10;if exist CHECKLIST.md (&#10;    del CHECKLIST.md&#10;    echo [OK] CHECKLIST.md eliminado&#10;) else (&#10;    echo [--] CHECKLIST.md no existe&#10;)&#10;&#10;if exist PASOS_SIGUIENTES.md (&#10;    del PASOS_SIGUIENTES.md&#10;    echo [OK] PASOS_SIGUIENTES.md eliminado&#10;) else (&#10;    echo [--] PASOS_SIGUIENTES.md no existe&#10;)&#10;&#10;if exist RESUMEN_REORGANIZACION.md (&#10;    del RESUMEN_REORGANIZACION.md&#10;    echo [OK] RESUMEN_REORGANIZACION.md eliminado&#10;) else (&#10;    echo [--] RESUMEN_REORGANIZACION.md no existe&#10;)&#10;&#10;echo.&#10;echo ========================================&#10;echo   LIMPIEZA COMPLETADA&#10;echo ========================================&#10;echo.&#10;echo Los siguientes archivos se mantienen:&#10;echo - README.md (principal del proyecto)&#10;echo - RESUMEN_FINAL_COMPLETO.md (resumen de todo el trabajo)&#10;echo - docs/ (carpeta con documentacion organizada)&#10;echo.&#10;&#10;pause&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

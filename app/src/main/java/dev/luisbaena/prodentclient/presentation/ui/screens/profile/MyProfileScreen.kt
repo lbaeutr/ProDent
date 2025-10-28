@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -24,10 +23,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.luisbaena.prodentclient.presentation.ui.components.BottomNavigationBar
 import dev.luisbaena.prodentclient.presentation.ui.components.Cabecera
+import dev.luisbaena.prodentclient.presentation.ui.components.common.dialogs.ConfirmationDialog
 import dev.luisbaena.prodentclient.presentation.ui.navigation.Routes
 import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 
-// TODO: Modularizar los componentes de este screen si es posible adjuntarlos con los del login que comparten muchos elementos
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyProfileScreen(
@@ -243,38 +242,19 @@ fun MyProfileScreen(
     }
 
     // DIÁLOGO DE CONFIRMACIÓN DE LOGOUT
-    if (showLogoutDialog) {
-        AlertDialog(
-            onDismissRequest = { showLogoutDialog = false },
-            icon = {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Logout,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.error
-                )
-            },
-            title = { Text("¿Cerrar sesión?") },
-            text = { Text("¿Estás seguro que deseas cerrar sesión?") },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        showLogoutDialog = false
-                        onLogout()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error
-                    )
-                ) {
-                    Text("Cerrar sesión")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showLogoutDialog = false }) {
-                    Text("Cancelar")
-                }
-            }
-        )
-    }
+    ConfirmationDialog(
+        show = showLogoutDialog,
+        title = "¿Cerrar sesión?",
+        message = "¿Estás seguro que deseas cerrar sesión?",
+        onConfirm = {
+            showLogoutDialog = false
+            onLogout()
+        },
+        onDismiss = { showLogoutDialog = false },
+        icon = Icons.AutoMirrored.Filled.Logout,
+        confirmButtonText = "Cerrar sesión",
+        dismissButtonText = "Cancelar"
+    )
 }
 
 // =====================================================

@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+// TODO: tenemos que implementar la pantalla de registro de usuarios, esto es solo un placeholder
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
