@@ -8,4 +8,8 @@ data class User(
     val telefono: String,
     val token: String,
     val role: String,
-)
+){
+    fun getFullName(): String {
+        return "$nombre $apellido"
+    }
+}

@@ -11,42 +11,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.luisbaena.prodentclient.presentation.ui.components.cabecera
+import androidx.navigation.NavController
+import dev.luisbaena.prodentclient.presentation.ui.components.BottomNavigationBar
+import dev.luisbaena.prodentclient.presentation.ui.components.Cabecera
 
+
+// TODO: Implementar la pantalla de inicio, esto es solo un placeholder
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onLogout: () -> Unit,
-    onNavigateToProfile: () -> Unit
+    navController: NavController
 ) {
+    Scaffold(
+        topBar = { Cabecera(titulo = "Inicio") },
+        bottomBar = { BottomNavigationBar(navController = navController) }
+    ) { paddingValues ->
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-
-        cabecera("Inicio")
-//        // TopAppBar con botón de logout
-//        TopAppBar(
-//            title = {
-//                Text(
-//                    "Inicio",
-//                    fontWeight = FontWeight.Bold
-//                )
-//            },
-////            actions = {
-////                IconButton(onClick = onNavigateToProfile) {
-////                    Icon(
-////                        Icons.Default.Person,
-////                        contentDescription = "Perfil"
-////                    )
-////                }
-////                IconButton(onClick = onLogout) {
-////                    Icon(
-////                        Icons.Default.ExitToApp,
-////                        contentDescription = "Cerrar sesión"
-////                    )
-////                }
-////            }
-//        )
 
         // Contenido principal
         Column(
@@ -74,4 +56,5 @@ fun HomeScreen(
             )
         }
     }
+        }
 }

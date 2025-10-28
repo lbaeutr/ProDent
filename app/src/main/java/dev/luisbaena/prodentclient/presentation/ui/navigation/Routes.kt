@@ -1,8 +1,5 @@
 package dev.luisbaena.prodentclient.presentation.ui.navigation
 
-import android.app.Notification
-
-
 // Objeto para definir rutas de navegación
 
 object Routes {
@@ -16,6 +13,10 @@ object Routes {
 
     // Rutas para otras pantallas
     const val MyProfile = "profile"
+    const val EditProfile = "edit_profile"
+    const val ChangePassword = "change_password"
+    const val Search = "search" // Para buscar trabajos
+    const val Clinic  = "clinic" // Para ver clínicas
 
     // Configuración
     const val Settings = "settings" // TODO: implementar

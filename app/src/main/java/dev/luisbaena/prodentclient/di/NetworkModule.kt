@@ -6,6 +6,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.luisbaena.prodentclient.data.remote.api.AuthApiService
+import dev.luisbaena.prodentclient.domain.repository.AuthRepository
+import dev.luisbaena.prodentclient.domain.usecase.ChangePasswordUseCase
+import dev.luisbaena.prodentclient.domain.usecase.GetProfileUseCase
+import dev.luisbaena.prodentclient.domain.usecase.UpdateProfileUseCase
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -29,7 +33,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    // TODO: VERIFICAR ESTO
+    // TODO: VERIFICAR ESTO y documentar el archivo
     //private const val BASE_URL = "https://prodent.onrender.com/api/"
 
     private const val BASE_URL = "https://prodent-api.onrender.com"
@@ -81,5 +85,20 @@ object NetworkModule {
     @Singleton
     fun provideAuthApiService(retrofit: Retrofit): AuthApiService{
         return retrofit.create(AuthApiService::class.java) // Crea una implementación de AuthApiService usando Retrofit
+    }
+
+    @Provides
+    fun provideGetProfileUseCase(authRepository: AuthRepository): GetProfileUseCase {
+        return GetProfileUseCase(authRepository)
+    }
+
+    @Provides
+    fun provideUpdateProfileUseCase(authRepository: AuthRepository): UpdateProfileUseCase {
+        return UpdateProfileUseCase(authRepository)
+    }
+
+    @Provides
+    fun provideChangePasswordUseCase(authRepository: AuthRepository): ChangePasswordUseCase {
+        return ChangePasswordUseCase(authRepository)
     }
 }

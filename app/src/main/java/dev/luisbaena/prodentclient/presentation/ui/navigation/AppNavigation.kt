@@ -12,8 +12,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.luisbaena.prodentclient.presentation.ui.screens.auth.LoginScreen
 import dev.luisbaena.prodentclient.presentation.ui.screens.auth.RegisterScreen
+import dev.luisbaena.prodentclient.presentation.ui.screens.clinic.ClinicScreen
 import dev.luisbaena.prodentclient.presentation.ui.screens.home.HomeScreen
+import dev.luisbaena.prodentclient.presentation.ui.screens.profile.ChangePasswordScreen
+import dev.luisbaena.prodentclient.presentation.ui.screens.profile.EditProfileScreen
 import dev.luisbaena.prodentclient.presentation.ui.screens.profile.MyProfileScreen
+import dev.luisbaena.prodentclient.presentation.ui.screens.search.SearchScreen
 import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 
 /*
@@ -76,26 +80,49 @@ fun AppNavigation() {
         // Pantalla de Perfil
         composable(Routes.MyProfile) {
             MyProfileScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
+                navController = navController,
+                onLogout = {
+                    authViewModel.logout {
+                        navController.navigate(Routes.Login) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
                 }
             )
+        }
+
+        // Editar Perfil
+        composable(Routes.EditProfile) {
+            EditProfileScreen(navController = navController)
+        }
+
+        // Cambiar Contraseña
+        composable(Routes.ChangePassword) {
+            ChangePasswordScreen(navController = navController)
         }
 
         // Pantalla Principal
         composable(Routes.Main) {
             HomeScreen(
-                onLogout = {
-                    authViewModel.logout()
-                    navController.navigate(Routes.Login) {
-                        popUpTo(Routes.Main) { inclusive = true }
-                    }
-                },
-                onNavigateToProfile = {
-                    navController.navigate(Routes.MyProfile)
-                }
+                navController = navController
             )
         }
+
+        // Pantalla de Clínica
+        composable(Routes.Clinic) {
+            ClinicScreen(
+                navController = navController
+
+            )
+        }
+
+        // Pantalla de Búsquedaq
+        composable(Routes.Search) {
+            SearchScreen(
+                navController = navController
+            )
+        }
+
 
     }
 }

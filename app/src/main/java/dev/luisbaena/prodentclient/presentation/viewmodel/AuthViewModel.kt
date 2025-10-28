@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.luisbaena.prodentclient.domain.model.User
+import dev.luisbaena.prodentclient.domain.usecase.ChangePasswordUseCase
 import dev.luisbaena.prodentclient.domain.usecase.GetCurrentUserUseCase
+import dev.luisbaena.prodentclient.domain.usecase.GetProfileUseCase
 import dev.luisbaena.prodentclient.domain.usecase.LoginUseCase
 import dev.luisbaena.prodentclient.domain.usecase.LogoutUseCase
+import dev.luisbaena.prodentclient.domain.usecase.UpdateProfileUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,10 +21,13 @@ import javax.inject.Inject
 /*
  * Funciones principales:
  *  login(): autentica al usuario , actualiza el usuario segun el resultado . EXITO o ERROR.
- *  logout(): cierra la sesión del usuario y resetea el estado de la UI, POR COMPLETO.
+ *  logout(): cierra la sesión del usuario y resetea el estado de la UI, POR COMPLETO, anadido un callback opcional.
  *  clearError(): limpia mensajes de error.
  *  resetSuccessState(): resetea el estado de éxito, útil para evitar acciones repetidas.
  *  checkCurrentUser(): verifica si hay un usuario autenticado al iniciar el ViewModel.
+ *  refreshProfile(): actualiza los datos del perfil del usuario desde la API.
+ *  updateProfile(): actualiza los datos del perfil del usuario.
+ *  changePassword(): cambia la contraseña del usuario.
  *
  * ESTE PATRON PERMITE QUE LA UI OBSERVE CAMBIOS DE ESTADO  DE FORMA AUTOMATICA  Y REACCIONE EN CONSECUENCIA.
  */
@@ -39,8 +45,10 @@ data class LoginUiState(
 class AuthViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val logoutUseCase: LogoutUseCase,
-    private val getCurrentUserUseCase: GetCurrentUserUseCase
-
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val getProfileUseCase: GetProfileUseCase,
+    private val updateProfileUseCase: UpdateProfileUseCase,
+    private val changePasswordUseCase: ChangePasswordUseCase
 ) : ViewModel() {
     // Estado mutable para la UI lo que permite actualizarse
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -77,10 +85,78 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun logout() {
+   // Refrescar datos del perfil desde API
+    fun refreshProfile() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+
+            val result = getProfileUseCase()
+
+            if (result.isSuccess) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    user = result.getOrNull(),
+                    errorMessage = null
+                )
+            } else {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = result.exceptionOrNull()?.message
+                )
+            }
+        }
+    }
+
+   // Actualizar perfil
+    fun updateProfile(nombre: String, apellido: String, email: String, telefono: String) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+
+            val result = updateProfileUseCase(nombre, apellido, email, telefono)
+
+            if (result.isSuccess) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    user = result.getOrNull(),
+                    errorMessage = null
+                )
+            } else {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = result.exceptionOrNull()?.message
+                )
+            }
+        }
+    }
+
+    //Cambiar contraseña
+    fun changePassword(newPassword: String, confirmPassword: String, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+
+            val result = changePasswordUseCase(newPassword, confirmPassword)
+
+            if (result.isSuccess) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = null
+                )
+                onSuccess()
+            } else {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = result.exceptionOrNull()?.message
+                )
+            }
+        }
+    }
+
+
+    fun logout(onComplete: () -> Unit = {}) {
         viewModelScope.launch {
             logoutUseCase()
-            _uiState.value = LoginUiState() // Reseteo completo de la UI "State"
+            _uiState.value = LoginUiState()
+            onComplete() //es opcional y normalmente se usa para navegar o hacer acciones después de cerrar sesión.
         }
     }
 
