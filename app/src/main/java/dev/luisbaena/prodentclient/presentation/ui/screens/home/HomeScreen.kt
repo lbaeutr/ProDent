@@ -11,19 +11,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.luisbaena.prodentclient.presentation.ui.components.BottomNavigationBar
 import dev.luisbaena.prodentclient.presentation.ui.components.Cabecera
+import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 
 
 // TODO: Implementar la pantalla de inicio, esto es solo un placeholder
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
+
+    val uiState by authViewModel.uiState.collectAsState()
+    val user = uiState.user ?: return // Si no hay usuario, no mostrar nada
+
+    LaunchedEffect(Unit) {
+        authViewModel.refreshProfile()
+    }
     Scaffold(
-        topBar = { Cabecera(titulo = "Inicio") },
+        topBar = { Cabecera(titulo = "Bienvenido ${user.nombre ?: "Bienvenido"}" ) },
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { paddingValues ->
     Column(

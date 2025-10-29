@@ -45,7 +45,7 @@ fun MyProfileScreen(
     }
 
     Scaffold(
-        topBar = { Cabecera(titulo = "Mi Perfil") },
+        topBar = { Cabecera(titulo = "Mi Perfil" ) },
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { paddingValues ->
 

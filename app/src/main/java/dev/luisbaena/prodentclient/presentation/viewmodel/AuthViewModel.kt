@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.luisbaena.prodentclient.domain.model.User
 import dev.luisbaena.prodentclient.domain.usecase.ChangePasswordUseCase
+import dev.luisbaena.prodentclient.domain.usecase.DeleteAccountByEmailUseCase
 import dev.luisbaena.prodentclient.domain.usecase.GetCurrentUserUseCase
 import dev.luisbaena.prodentclient.domain.usecase.GetProfileUseCase
 import dev.luisbaena.prodentclient.domain.usecase.LoginUseCase
@@ -37,7 +38,8 @@ data class LoginUiState(
     val isLoading: Boolean = false, // indica si hay una operación en curso.
     val isSuccess: Boolean = false, // indica si la operación fue exitosa.
     val errorMessage: String? = null, // almacena mensajes de error.
-    val user: User? = null // datos del usuario autenticado.
+    val user: User? = null, // datos del usuario autenticado.
+    val isAccountDeleted: Boolean = false // indica si la cuenta ha sido eliminada.
 )
 
 
@@ -48,7 +50,8 @@ class AuthViewModel @Inject constructor(
     private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val getProfileUseCase: GetProfileUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase,
-    private val changePasswordUseCase: ChangePasswordUseCase
+    private val changePasswordUseCase: ChangePasswordUseCase,
+    private val deleteAccountByEmailUseCase: DeleteAccountByEmailUseCase
 ) : ViewModel() {
     // Estado mutable para la UI lo que permite actualizarse
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -150,6 +153,37 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
+
+    // Función para que admin elimine cuenta por email
+    fun deleteAccountByEmail(email: String) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isLoading = true,
+                errorMessage = null
+            )
+
+            deleteAccountByEmailUseCase(email).fold(
+                onSuccess = { message ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        isAccountDeleted = true
+                    )
+                },
+                onFailure = { error ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = error.message
+                    )
+                }
+            )
+        }
+    }
+
+    fun resetAccountDeletedState() {
+        _uiState.value = _uiState.value.copy(isAccountDeleted = false)
+    }
+
+
 
 
     fun logout(onComplete: () -> Unit = {}) {

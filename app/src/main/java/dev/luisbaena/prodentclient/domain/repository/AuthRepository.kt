@@ -24,4 +24,6 @@ interface AuthRepository {
         oldPassword: String,
         newPassword: String
     ): Result<Unit>
+    suspend fun deleteAccountByEmail(email: String): Result<String>
+
 }

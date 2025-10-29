@@ -10,6 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dev.luisbaena.prodentclient.presentation.ui.screens.admin.DeleteAccountScreen
 import dev.luisbaena.prodentclient.presentation.ui.screens.auth.LoginScreen
 import dev.luisbaena.prodentclient.presentation.ui.screens.auth.RegisterScreen
 import dev.luisbaena.prodentclient.presentation.ui.screens.clinic.ClinicScreen
@@ -99,6 +100,9 @@ fun AppNavigation() {
         // Cambiar Contraseña
         composable(Routes.ChangePassword) {
             ChangePasswordScreen(navController = navController)
+        }
+        composable(Routes.DeleteAccount) {
+             DeleteAccountScreen(navController = navController)
         }
 
         // Pantalla Principal

@@ -33,12 +33,12 @@ sealed class BottomNavItem(
         unselectedIcon = Icons.Outlined.LocalHospital
     )
 
-    object MyProfile : BottomNavItem(
-        route = Routes.MyProfile,
-        title = "Perfil",
-        selectedIcon = Icons.Filled.Person,
-        unselectedIcon = Icons.Outlined.Person
-    )
+//    object MyProfile : BottomNavItem(
+//        route = Routes.MyProfile,
+//        title = "Perfil",
+//        selectedIcon = Icons.Filled.Person,
+//        unselectedIcon = Icons.Outlined.Person
+//    )
 }
 
 // Lista para iterar
@@ -46,5 +46,5 @@ val bottomNavItems = listOf(
     BottomNavItem.Main,
     BottomNavItem.Search,
     BottomNavItem.Clinic,
-    BottomNavItem.MyProfile
+    //BottomNavItem.MyProfile
 )

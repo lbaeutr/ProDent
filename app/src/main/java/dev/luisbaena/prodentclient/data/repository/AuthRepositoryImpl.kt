@@ -13,6 +13,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 
+// TODO: hacer una funcion para los casos comunes de manejo de errores HTTP
+
 /*
  *  Logica de autenticacion conectadndose al API remoto y gestionando la sesion localmente.
  *  Implementa las operaciones definidas en AuthRepository.
@@ -219,6 +221,37 @@ class AuthRepositoryImpl @Inject constructor(
                 else -> "Error al cambiar contraseña"
             }
             Result.failure(Exception(errorMessage))
+        } catch (e: IOException) {
+            Result.failure(Exception("Sin conexión a internet"))
+        } catch (e: Exception) {
+            Result.failure(Exception("Error: ${e.message}"))
+        }
+    }
+
+
+    override suspend fun deleteAccountByEmail(email: String): Result<String> {
+        return try {
+            val currentToken = userPreferences.getUserToken()
+                ?: return Result.failure(Exception("No hay sesión activa"))
+
+            // Llamar API para eliminar cuenta por email (admin)
+            val response = apiService.deleteAccount(
+                email = email,
+                token = "Bearer $currentToken"
+            )
+
+            Result.success(response.message)
+
+        } catch (e: HttpException) {
+            val errorMessage = when (e.code()) {
+                404 -> "Usuario no encontrado"
+                401 -> "Sesión expirada"
+                403 -> "No tienes permisos para eliminar cuentas"
+                500 -> "Error interno del servidor"
+                else -> "Error al eliminar cuenta (${e.code()})"
+            }
+            Result.failure(Exception(errorMessage))
+
         } catch (e: IOException) {
             Result.failure(Exception("Sin conexión a internet"))
         } catch (e: Exception) {
