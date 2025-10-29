@@ -10,9 +10,3 @@ data class DeleteAccountResponseDto(
     val timestamp: String? = null,
     val path: String? = null
 )
-
-//TODO: revisar si es necesario ampliar el DTO con los campos status, error, timestamp, path ...
-//@Serializable
-//data class DeleteAccountResponseDto(
-//    val message: String
-//)

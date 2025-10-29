@@ -26,7 +26,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 @Composable
 fun DeleteAccountScreen(
     navController: NavController,
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    onOpenDrawer: () -> Unit
 ) {
     val uiState by authViewModel.uiState.collectAsState()
 
@@ -36,7 +37,11 @@ fun DeleteAccountScreen(
 
     Scaffold(
         topBar = {
-            Cabecera(titulo = "Eliminar Cuenta de Usuario")
+            Cabecera(
+                titulo = "Eliminar Cuenta de Usuario",
+                showBackIcon = true,
+                onBackClick = { navController.popBackStack() }
+            )
         }
     ) { paddingValues ->
         Column(

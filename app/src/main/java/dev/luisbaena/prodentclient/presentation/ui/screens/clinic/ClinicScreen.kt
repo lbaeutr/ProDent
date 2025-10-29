@@ -15,9 +15,15 @@ import dev.luisbaena.prodentclient.presentation.ui.components.BottomNavigationBa
 // TODO: Implementar la pantalla de clínicas, esto es solo un placeholder
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClinicScreen(navController: NavController) {
+fun ClinicScreen(navController: NavController, onOpenDrawer: () -> Unit) {
     Scaffold(
-        topBar = { Cabecera(titulo = "Clínicas") },
+        topBar = {
+            Cabecera(
+                titulo = "Clínicas",
+                showMenuIcon = true,
+                onMenuClick = onOpenDrawer
+            )
+        },
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { paddingValues ->
         Box(

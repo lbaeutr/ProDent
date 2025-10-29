@@ -27,7 +27,8 @@ import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 @Composable
 fun EditProfileScreen(
     navController: NavController,
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    onOpenDrawer: () -> Unit
 ) {
     val uiState by authViewModel.uiState.collectAsState()
     val user = uiState.user
@@ -53,7 +54,9 @@ fun EditProfileScreen(
     Scaffold(
         topBar = {
             Cabecera(
-                titulo = "Editar Perfil"
+                titulo = "Editar Perfil",
+                showBackIcon = true,
+                onBackClick = { navController.popBackStack() }
             )
         }
     ) { paddingValues ->

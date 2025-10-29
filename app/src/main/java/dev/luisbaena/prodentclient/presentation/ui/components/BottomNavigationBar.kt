@@ -76,8 +76,11 @@ fun BottomNavigationBar(
                     onClick = {
                         if (currentRoute != item.route) {
                             navController.navigate(item.route) {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
+                                // Evitar acumulación -> Se me quedaba atascado en ciertos destinos
+                                navController.graph.startDestinationRoute?.let { startRoute ->
+                                    popUpTo(startRoute) {
+                                        saveState = true
+                                    }
                                 }
                                 launchSingleTop = true
                                 restoreState = true

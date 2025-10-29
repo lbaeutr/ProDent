@@ -25,7 +25,8 @@ import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 @Composable
 fun ChangePasswordScreen(
     navController: NavController,
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    onOpenDrawer: () -> Unit
 ) {
     val uiState by authViewModel.uiState.collectAsState()
 
@@ -37,7 +38,9 @@ fun ChangePasswordScreen(
     Scaffold(
         topBar = {
             Cabecera(
-                titulo = "Cambiar Contraseña"
+                titulo = "Cambiar Contraseña",
+                showBackIcon = true,
+                onBackClick = { navController.popBackStack() }
             )
         }
     ) { paddingValues ->

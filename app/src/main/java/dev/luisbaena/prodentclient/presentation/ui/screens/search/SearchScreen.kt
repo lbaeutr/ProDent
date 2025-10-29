@@ -14,9 +14,15 @@ import dev.luisbaena.prodentclient.presentation.ui.components.BottomNavigationBa
 //TODO: Implementar la pantalla de búsqueda de trabajos, esto es solo un placeholder
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(navController: NavController) {
+fun SearchScreen(navController: NavController, onOpenDrawer: () -> Unit) {
     Scaffold(
-        topBar = { Cabecera(titulo = "Buscar Trabajos") },
+        topBar = {
+            Cabecera(
+                titulo = "Buscar Trabajos",
+                showMenuIcon = true,
+                onMenuClick = onOpenDrawer
+            )
+        },
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { paddingValues ->
         Box(

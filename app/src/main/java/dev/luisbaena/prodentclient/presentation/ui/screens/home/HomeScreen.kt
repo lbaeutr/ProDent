@@ -23,7 +23,8 @@ import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 @Composable
 fun HomeScreen(
     navController: NavController,
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    onOpenDrawer: () -> Unit
 ) {
 
     val uiState by authViewModel.uiState.collectAsState()
@@ -33,11 +34,19 @@ fun HomeScreen(
         authViewModel.refreshProfile()
     }
     Scaffold(
-        topBar = { Cabecera(titulo = "Bienvenido ${user.nombre ?: "Bienvenido"}" ) },
+        topBar = {
+            Cabecera(
+                titulo = "Bienvenido ${user.nombre ?: "Bienvenido"}",
+                showMenuIcon = true,
+                onMenuClick = onOpenDrawer
+            )
+        },
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { paddingValues ->
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
     ) {
 
         // Contenido principal

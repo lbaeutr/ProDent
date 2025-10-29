@@ -32,7 +32,8 @@ import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 fun MyProfileScreen(
     navController: NavController,
     onLogout: () -> Unit,
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    onOpenDrawer: () -> Unit
 ) {
     val uiState by authViewModel.uiState.collectAsState()
     val user = uiState.user
@@ -45,7 +46,13 @@ fun MyProfileScreen(
     }
 
     Scaffold(
-        topBar = { Cabecera(titulo = "Mi Perfil" ) },
+        topBar = {
+            Cabecera(
+                titulo = "Mi Perfil",
+                showMenuIcon = true,
+                onMenuClick = onOpenDrawer
+            )
+        },
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { paddingValues ->
 
