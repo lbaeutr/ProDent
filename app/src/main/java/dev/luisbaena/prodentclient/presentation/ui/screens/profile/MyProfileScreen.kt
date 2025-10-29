@@ -188,13 +188,6 @@ fun MyProfileScreen(
                             navController.navigate(Routes.ChangePassword)
                         }
                     )
-
-//                    ProfileActionCard(
-//                        icon = Icons.Default.Notifications,
-//                        title = "Notificaciones",
-//                        subtitle = "Configura tus notificaciones",
-//                        onClick = { /* TODO */ }
-//                    )
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -226,17 +219,7 @@ fun MyProfileScreen(
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))
-//
-//                // FOOTER
-//                Text(
-//                    text = "ProDent v1.0.0",
-//                    style = MaterialTheme.typography.bodySmall,
-//                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(bottom = 16.dp),
-//                    textAlign = TextAlign.Center
-//                )
+
             }
         }
     }
