@@ -225,13 +225,6 @@ fun AppNavigation() {
             AppNavigationDrawer(
                 navController = navController,
                 user = uiState.user,
-                onLogout = {
-                    authViewModel.logout {
-                        navController.navigate(Routes.Login) {
-                            popUpTo(0) { inclusive = true }
-                        }
-                    }
-                },
                 onCloseDrawer = {
                     scope.launch {
                         drawerState.close()
