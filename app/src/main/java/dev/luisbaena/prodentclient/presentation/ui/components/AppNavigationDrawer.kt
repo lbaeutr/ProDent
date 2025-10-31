@@ -41,7 +41,7 @@ fun AppNavigationDrawer(
     val uiState by authViewModel.uiState.collectAsState()
     val user = uiState.user
 
-    // Determinar el rol del usuario - ajusta según tu modelo User
+    // Determinar el rol del usuario
     val userRole = when {
         user == null -> UserRole.USER
         user.role?.uppercase() == "ADMIN" -> UserRole.ADMIN

@@ -58,11 +58,6 @@ class AuthViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-//    init {
-//        viewModelScope.launch {
-//            checkCurrentUser()
-//        }
-//    }
 
     init {
         // Observar cambios en las preferencias de forma reactiva
@@ -212,29 +207,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-
     fun clearError() {
         _uiState.value = _uiState.value.copy(errorMessage = null)
     }
-//
-//    private fun checkCurrentUser() {
-//        viewModelScope.launch {
-//            _uiState.value = _uiState.value.copy(isLoading = true)
-//
-//            val user = getCurrentUserUseCase()
-//
-//            _uiState.value = if (user != null) {
-//                _uiState.value.copy(
-//                    user = user,
-//                    isSuccess = true,
-//                    isLoading = false,
-//                    errorMessage = null
-//                )
-//            } else {
-//                LoginUiState() // Estado completamente limpio cuando no hay usuario
-//            }
-//        }
-//    }
-
-
 }
