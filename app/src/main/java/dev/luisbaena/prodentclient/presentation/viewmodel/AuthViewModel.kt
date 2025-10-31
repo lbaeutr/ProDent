@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-
 /*
  * Funciones principales:
  *  login(): autentica al usuario , actualiza el usuario segun el resultado . EXITO o ERROR.
@@ -58,7 +57,9 @@ class AuthViewModel @Inject constructor(
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
     init {
-        checkCurrentUser()
+        viewModelScope.launch {
+            checkCurrentUser()
+        }
     }
 
     fun login(email: String, password: String) {
@@ -88,7 +89,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-   // Refrescar datos del perfil desde API
+    // Refrescar datos del perfil desde API
     fun refreshProfile() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
@@ -110,7 +111,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-   // Actualizar perfil
+    // Actualizar perfil
     fun updateProfile(nombre: String, apellido: String, email: String, telefono: String) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
@@ -183,9 +184,6 @@ class AuthViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isAccountDeleted = false)
     }
 
-
-
-
     fun logout(onComplete: () -> Unit = {}) {
         viewModelScope.launch {
             logoutUseCase()
@@ -198,12 +196,9 @@ class AuthViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(errorMessage = null)
     }
 
-    fun resetSuccessState() {
-        _uiState.value = _uiState.value.copy(isSuccess = false)
-    }
-
     private fun checkCurrentUser() {
         viewModelScope.launch {
+
             val user = getCurrentUserUseCase()
             if (user != null) {
                 _uiState.value = _uiState.value.copy(user = user, isSuccess = true)

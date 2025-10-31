@@ -55,7 +55,7 @@ class AuthRepositoryImpl @Inject constructor(
                     userPreferences.saveUser(user)
                     Log.d(
                         "AuthRepo",
-                        "Usuario guardado con perfil: email=${user.email} ,token=${user.token}"
+                        "Usuario guardado con perfil: email=${user.email}, role='${user.role}', token=${user.token}"
                     )
                     Result.success(user)
                 } catch (e: Exception) {

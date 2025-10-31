@@ -1,97 +1,3 @@
-//package dev.luisbaena.prodentclient.presentation.ui.navigation
-//
-//import androidx.compose.animation.core.tween
-//import androidx.compose.animation.fadeIn
-//import androidx.compose.animation.fadeOut
-//import androidx.compose.material3.DrawerValue
-//import androidx.compose.material3.rememberDrawerState
-//import androidx.compose.runtime.Composable
-//import androidx.compose.runtime.collectAsState
-//import androidx.compose.runtime.getValue
-//import androidx.compose.runtime.rememberCoroutineScope
-//import androidx.hilt.navigation.compose.hiltViewModel
-//import androidx.navigation.compose.NavHost
-//import androidx.navigation.compose.composable
-//import androidx.navigation.compose.rememberNavController
-//import dev.luisbaena.prodentclient.presentation.ui.screens.admin.DeleteAccountScreen
-//import dev.luisbaena.prodentclient.presentation.ui.screens.auth.LoginScreen
-//import dev.luisbaena.prodentclient.presentation.ui.screens.auth.RegisterScreen
-//import dev.luisbaena.prodentclient.presentation.ui.screens.clinic.ClinicScreen
-//import dev.luisbaena.prodentclient.presentation.ui.screens.home.HomeScreen
-//import dev.luisbaena.prodentclient.presentation.ui.screens.profile.ChangePasswordScreen
-//import dev.luisbaena.prodentclient.presentation.ui.screens.profile.EditProfileScreen
-//import dev.luisbaena.prodentclient.presentation.ui.screens.profile.MyProfileScreen
-//import dev.luisbaena.prodentclient.presentation.ui.screens.search.SearchScreen
-//import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
-//import kotlinx.coroutines.launch
-//
-///*
-// * Sistema de Navegación de la App
-// * Aquí se define la lógica de navegación entre pantallas
-// * y se inicializan las rutas principales.
-// */
-//
-//@Composable
-//fun AppNavigation() {
-//    val navController = rememberNavController()  // Controlador de navegación
-//    val authViewModel: AuthViewModel = hiltViewModel()  // ViewModel global de auth
-//    val uiState by authViewModel.uiState.collectAsState()  // Estado del usuario
-//
-//    val animationDuration = 400
-//
-//    // Pantalla principal según estado de autenticación
-//    val starDestination = if (uiState.user != null) {
-//        Routes.Main
-//    } else {
-//        Routes.Login
-//    }
-//
-//    // Estado del drawer
-//    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-//    val scope = rememberCoroutineScope()
-//
-//    // Función para abrir el drawer
-//    val openDrawer: () -> Unit = {
-//        scope.launch {
-//            drawerState.open()
-//        }
-//    }
-//
-//
-//    NavHost(
-//        navController = navController,
-//        startDestination = starDestination,
-//
-//        enterTransition = {
-//            fadeIn(animationSpec = tween(animationDuration))
-//        },
-//        exitTransition = {
-//            fadeOut(animationSpec = tween(animationDuration))
-//        },
-//        popEnterTransition = {
-//            fadeIn(animationSpec = tween(animationDuration))
-//        },
-//        popExitTransition = {
-//            fadeOut(animationSpec = tween(animationDuration))
-//        }
-//    ) {
-//        // Pantalla de Login
-//        composable(Routes.Login) {
-//            LoginScreen(
-//                onLoginSuccess = {
-//                    navController.navigate(Routes.Main) {
-//                        popUpTo(Routes.Login) { inclusive = true }
-//                    }
-//                }
-//            )
-//        }
-//        // Pantalla de Registro
-//        composable(Routes.Register) {
-//            RegisterScreen(
-//                onNavigateBack = {
-//                    navController.popBackStack()
-//                }
-//            )
 //        }
 //
 //        // Pantalla de Perfil
@@ -218,18 +124,18 @@ fun AppNavigation() {
         }
     }
 
-    // Drawer envuelve todo
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             AppNavigationDrawer(
                 navController = navController,
-                user = uiState.user,
+                authViewModel = authViewModel,
                 onCloseDrawer = {
                     scope.launch {
                         drawerState.close()
                     }
-                }
+                },
+                isDrawerOpen = drawerState.isOpen
             )
         },
         gesturesEnabled = showNavigation  //  activo en pantallas autenticadas
