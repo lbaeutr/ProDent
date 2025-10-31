@@ -19,7 +19,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import dev.luisbaena.prodentclient.R
 import dev.luisbaena.prodentclient.domain.model.User
+import dev.luisbaena.prodentclient.presentation.ui.navigation.UserRole
 import dev.luisbaena.prodentclient.presentation.ui.navigation.drawerNavItems
+import dev.luisbaena.prodentclient.presentation.ui.navigation.getDrawerItemsForRole
 import dev.luisbaena.prodentclient.presentation.viewmodel.AuthViewModel
 
 /**
@@ -39,6 +41,14 @@ fun AppNavigationDrawer(
     val uiState by authViewModel.uiState.collectAsState()
     val user = uiState.user
 
+    // Determinar el rol del usuario - ajusta según tu modelo User
+    val userRole = when {
+        user == null -> UserRole.USER
+        user.role?.uppercase() == "ADMIN" -> UserRole.ADMIN
+        user.role?.uppercase() == "USER" -> UserRole.USER
+        else -> UserRole.USER
+    }
+
     ModalDrawerSheet(
         modifier = modifier,
         drawerContainerColor = MaterialTheme.colorScheme.surface
@@ -56,8 +66,11 @@ fun AppNavigationDrawer(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Items del menú
-            drawerNavItems.forEach { item ->
+            // Filtrar items según el rol
+            val filteredItems = getDrawerItemsForRole(userRole)
+
+            // Mostrar items filtrados
+            filteredItems.forEach { item ->
                 val selected = currentRoute == item.route
 
                 NavigationDrawerItem(
@@ -88,7 +101,6 @@ fun AppNavigationDrawer(
                     )
                 )
             }
-
 
             Spacer(modifier = Modifier.weight(1f))
 

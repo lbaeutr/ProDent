@@ -3,6 +3,7 @@ package dev.luisbaena.prodentclient.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.luisbaena.prodentclient.data.local.preferencias.UserPreferences
 import dev.luisbaena.prodentclient.domain.model.User
 import dev.luisbaena.prodentclient.domain.usecase.ChangePasswordUseCase
 import dev.luisbaena.prodentclient.domain.usecase.DeleteAccountByEmailUseCase
@@ -50,15 +51,34 @@ class AuthViewModel @Inject constructor(
     private val getProfileUseCase: GetProfileUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase,
     private val changePasswordUseCase: ChangePasswordUseCase,
-    private val deleteAccountByEmailUseCase: DeleteAccountByEmailUseCase
+    private val deleteAccountByEmailUseCase: DeleteAccountByEmailUseCase,
+    private val userPreferences: UserPreferences
 ) : ViewModel() {
     // Estado mutable para la UI lo que permite actualizarse
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
+//    init {
+//        viewModelScope.launch {
+//            checkCurrentUser()
+//        }
+//    }
+
     init {
+        // Observar cambios en las preferencias de forma reactiva
         viewModelScope.launch {
-            checkCurrentUser()
+            userPreferences.getUserFlow().collect { user ->
+                _uiState.value = if (user != null) {
+                    _uiState.value.copy(
+                        user = user,
+                        isSuccess = true,
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                } else {
+                    LoginUiState() // Estado limpio cuando no hay usuario
+                }
+            }
         }
     }
 
@@ -188,22 +208,33 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             logoutUseCase()
             _uiState.value = LoginUiState()
-            onComplete() //es opcional y normalmente se usa para navegar o hacer acciones después de cerrar sesión.
+            onComplete()
         }
     }
+
 
     fun clearError() {
         _uiState.value = _uiState.value.copy(errorMessage = null)
     }
+//
+//    private fun checkCurrentUser() {
+//        viewModelScope.launch {
+//            _uiState.value = _uiState.value.copy(isLoading = true)
+//
+//            val user = getCurrentUserUseCase()
+//
+//            _uiState.value = if (user != null) {
+//                _uiState.value.copy(
+//                    user = user,
+//                    isSuccess = true,
+//                    isLoading = false,
+//                    errorMessage = null
+//                )
+//            } else {
+//                LoginUiState() // Estado completamente limpio cuando no hay usuario
+//            }
+//        }
+//    }
 
-    private fun checkCurrentUser() {
-        viewModelScope.launch {
-
-            val user = getCurrentUserUseCase()
-            if (user != null) {
-                _uiState.value = _uiState.value.copy(user = user, isSuccess = true)
-            }
-        }
-    }
 
 }
