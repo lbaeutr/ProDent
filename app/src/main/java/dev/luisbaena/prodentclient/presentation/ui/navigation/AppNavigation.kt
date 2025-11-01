@@ -1,58 +1,3 @@
-//        }
-//
-//        // Pantalla de Perfil
-//        composable(Routes.MyProfile) {
-//            MyProfileScreen(
-//                navController = navController,
-//                onLogout = {
-//                    authViewModel.logout {
-//                        navController.navigate(Routes.Login) {
-//                            popUpTo(0) { inclusive = true }
-//                        }
-//                    }
-//                }
-//            )
-//        }
-//
-//        // Editar Perfil
-//        composable(Routes.EditProfile) {
-//            EditProfileScreen(navController = navController)
-//        }
-//
-//        // Cambiar Contraseña
-//        composable(Routes.ChangePassword) {
-//            ChangePasswordScreen(navController = navController)
-//        }
-//        composable(Routes.DeleteAccount) {
-//             DeleteAccountScreen(navController = navController)
-//        }
-//
-//        // Pantalla Principal
-//        composable(Routes.Main) {
-//            HomeScreen(
-//                navController = navController
-//            )
-//        }
-//
-//        // Pantalla de Clínica
-//        composable(Routes.Clinic) {
-//            ClinicScreen(
-//                navController = navController
-//
-//            )
-//        }
-//
-//        // Pantalla de Búsquedaq
-//        composable(Routes.Search) {
-//            SearchScreen(
-//                navController = navController
-//            )
-//        }
-//
-//
-//    }
-//}
-
 package dev.luisbaena.prodentclient.presentation.ui.navigation
 
 import androidx.compose.animation.core.tween
@@ -94,7 +39,7 @@ fun AppNavigation() {
     val authViewModel: AuthViewModel = hiltViewModel()  // ViewModel global de auth
     val uiState by authViewModel.uiState.collectAsState()  // Estado del usuario
 
-    val animationDuration = 400 //TODO: Ajustar duración de animaciones
+    val animationDuration = 500 //TODO: Ajustar duración de animaciones
 
     // Estado del drawer
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -206,7 +151,7 @@ fun AppNavigation() {
                     onOpenDrawer = openDrawer
                 )
             }
-
+            // Eliminar Cuenta (Admin)
             composable(Routes.DeleteAccount) {
                 DeleteAccountScreen(
                     navController = navController,

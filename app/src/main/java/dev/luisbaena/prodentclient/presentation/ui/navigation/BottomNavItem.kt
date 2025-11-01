@@ -25,26 +25,10 @@ sealed class BottomNavItem(
         selectedIcon = Icons.Filled.Search,
         unselectedIcon = Icons.Outlined.Search
     )
-
-    object Clinic : BottomNavItem(
-        route = Routes.Clinic,
-        title = "Clínicas",
-        selectedIcon = Icons.Filled.LocalHospital,
-        unselectedIcon = Icons.Outlined.LocalHospital
-    )
-
-//    object MyProfile : BottomNavItem(
-//        route = Routes.MyProfile,
-//        title = "Perfil",
-//        selectedIcon = Icons.Filled.Person,
-//        unselectedIcon = Icons.Outlined.Person
-//    )
 }
 
 // Lista para iterar
 val bottomNavItems = listOf(
     BottomNavItem.Main,
     BottomNavItem.Search,
-    BottomNavItem.Clinic,
-    //BottomNavItem.MyProfile
-)
+    )
